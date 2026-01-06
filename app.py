@@ -11,6 +11,7 @@
 #     "Predicts inventory stress to detect stockout or overstock risks using regression modeling."
 # )
 
+
 st.sidebar.header("SKU Input Parameters")
 
 Inventory_Level = st.sidebar.number_input("Inventory Level", min_value=0, value=100)
@@ -43,23 +44,6 @@ input_df = pd.DataFrame({
     "Region": [Region],
     "Weather_Condition": [Weather_Condition],
     "Epidemic": [Epidemic]
-
-
-import streamlit as st
-import joblib
-from xgboost import XGBRegressor
-
-@st.cache_resource
-def load_model():
-    preprocessor = joblib.load("preprocessor.pkl")
-
-    model = XGBRegressor()
-    model.load_model("xgb_model.json")
-
-    return preprocessor, model
-
-preprocessor, model = load_model()
-
 
 X_input_processed = preprocessor.transform(input_df)
 prediction = model.predict(X_input_processed)
